@@ -1,0 +1,53 @@
+## Subscribing to Channel
+
+You can **subscribe** to a **channel** to get live stream of events using a **single** WebSocket connection by using `1` as `method` in the request body.
+
+### Chart Data
+
+Provide a visualization cryptocurrency price movements and trends for easy analysis. Use chart:tick-(pair) as channel. Change (pair) to the one that you want to subscribe to.
+
+Request:
+
+```json
+{
+    "method": 1,
+    "params": {
+        "channel": "chart:tick-usdtidr"
+    },
+    "id": 2
+}
+```
+
+Response:
+
+```json
+{
+    "id": 2,
+    "result": {
+        "recoverable": true,
+        "epoch": "1630401092",
+        "offset": 814137
+    }
+}
+```
+
+Received Message:
+
+```json
+{
+    "result": {
+        "channel": "chart:tick-usdtidr",
+        "data": {
+            "data": [
+                [
+                    1632717721,        // epoch timestamp in second
+                    4087327,           // sequence number
+                    14340,             // price
+                    "1063.73019525"    // volume
+                ]
+            ],
+            "offset": 266983           // offset of the data
+        }
+    }
+}
+```

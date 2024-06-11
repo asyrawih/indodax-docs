@@ -1,0 +1,31 @@
+## Trades
+Provide transaction Information from all pairs/selected pair
+#### Request
+```
+/api/trades/$pair_id
+```
+##### Parameter 
+| Type | Mandatory | Description |
+| ------ | ------ | ------ |
+| String | Optional| Example: `btdidr`, `tenidr`, `ethidr`. For specific pair id please use Response from API [`/api/pairs`](#pairs). Default `$pair_id` is `btcidr`. |
+
+#### Response
+```json
+[
+    {
+        "date": "1571207255",
+        "price": "511",
+        "amount": "123.19523759",
+        "tid": "1623490",
+        "type": "sell"
+    },
+    {
+        "date": "1571207236",
+        "price": "512",
+        "amount": "121.42187500",
+        "tid": "1623489",
+        "type": "buy"
+    }
+]
+```
+

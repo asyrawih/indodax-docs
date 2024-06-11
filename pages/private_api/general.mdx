@@ -1,0 +1,157 @@
+## General API Information
+* The base endpoint is: **https://indodax.com/tapi**
+* All endpoints return either a JSON object or array.
+* Data is returned in **descending** order. newest first, oldest last.
+* All time and timestamp related fields are in **milliseconds**.
+
+## Error Codes
+* Any endpoint can return an ERROR
+
+Sample Payload below:
+```javascript
+{
+    "success": 0,
+    "error": "Invalid credentials. API not found or session has expired.",
+    "error_code": "invalid_credentials"
+}
+```
+
+## General Information on Endpoints
+* Parameters may be sent in any order.
+* All requests must be sent with POST.
+* For each request you need to include these variable to make the call valid: method and nonce or timestamp.
+
+    | Parameter | Description | Optional | Example |
+    |-|-|-|-|
+    |`method`| Specify the method you want to call | no | getInfo|
+    |`nonce`| An increment integer. For example if the last request's nonce is 1000, the next request should be 1001 or a larger number. To learn more about [nonce](http://en.wikipedia.org/wiki/Cryptographic_nonce)  | no | 1000
+
+    | Parameter | Description | Optional | Example |
+    |-|-|-| - |
+    |`method`| Specify the method you want to call | no | getInfo
+    |`timestamp`| This parameter should be the millisecond timestamp of when the request was created and sent | no | 1578303960000
+    |`recvWindow`| The value should specify the number of millisecond after timestamp where your request is valid. That mean your request still valid if it sent and processed within timestamp and timestamp + recvWindow. Default value is 5000 (milliseconds) | no | 1578303937000
+    
+## Endpoint Security Type
+* API-keys are passed into the Rest API via the `Key`
+  header.
+* API-keys and secret-keys **are case sensitive**.
+* There are 3 different permissions that can be applied to API Key: view, trade and withdraw
+
+    |Permission | Allowed Methods|
+    |-|-|
+    |view | getInfo, transHistory, tradeHistory, openOrders, orderHistory, getOrder, getOrderByClientOrderId |
+    |trade | trade, cancelOrder, cancelByClientOrderId |
+    |withdraw | withdrawFeee, withdrawCoin |
+    
+## Signed (TRADE and USER_DATA) Endpoint Security
+* `SIGNED` endpoints require an additional parameter, `Sign`, to be
+  sent in the  `header`.
+* Endpoints use `HMAC SHA512` signatures.
+  Use your `secretKey` as the key and `totalParams` as the value for the HMAC operation.
+* The `signature` is **not case sensitive**.
+* `totalParams` is defined as the `query string` concatenated with the
+  `request body`. example `*(?param=val&param1=val1) encrypted with method HMAC-SHA512 using secret key*`
+  
+## Timing Security
+* A `SIGNED` endpoint also requires a parameter, `timestamp`, to be sent which
+  should be the millisecond timestamp of when the request was created and sent.
+* An additional parameter, `recvWindow`, may be sent to specify the number of
+  milliseconds after `timestamp` the request is valid for. If `recvWindow`
+  is not sent, **it defaults to 5000**.
+* The logic is as follows:
+  ```php
+  if ($timestamp >= ($serverTime + 1000) || ($serverTime - $timestamp) > $recvWindow) {
+      // reject request
+  } else {
+      // process request
+  }
+  ```
+**Serious trading is about timing.** Networks can be unstable and unreliable, which can lead to requests taking varying amounts of time to reach the servers. With `recvWindow`, you can specify that the request must be processed within a certain number of milliseconds or be rejected by the server.
+
+### SIGNED Endpoint Examples for POST getInfo
+Here is a step-by-step example of how to send a vaild signed payload from the
+Linux command line using. `curl`
+
+| Key | Value
+|-|-
+| `apiKey` | AEDHIGAT-QATEGWOX-OPCSCPQX-2E00B1L7-VJBXXKMA
+| `secretKey` | f60617a68fcce028f0a90bc9eb765d17379eb548cc935c01a7ee3186eecf870e9b68f27a31bcfe8d
+
+| Parameter | Value |
+|-|-|
+|`method`| getInfo |
+|`timestamp`| 1578304294000 |
+|`recvWindow`| 1578303937000 |
+
+#### Example : send parameter using request body
+* **requestBody:** method=getInfo&timestamp=1578304294000&recvWindow=1578303937000
+* **HMAC SHA512 signature:**
+    ```
+    [linux]$ echo -n "method=getInfo&timestamp=1578304294000&recvWindow=1578303937000" | openssl dgst -sha512 -hmac "f60617a68fcce028f0a90bc9eb765d17379eb548cc935c01a7ee3186eecf870e9b68f27a31bcfe8d"
+    (stdin)= bab004e5a518740d7a33b38b44dbebecd3fb39f40b42391af39fcce06edabff5233b3e8064a07c528d1c751a6923d5116026c7786e01b22e2d35277a098cae99
+    ```
+* **curl command:**
+    ```
+    (HMAC SHA512)
+    [linux]$ curl -H "Key: AEDHIGAT-QATEGWOX-OPCSCPQX-2E00B1L7-VJBXXKMA" -H "Sign: bab004e5a518740d7a33b38b44dbebecd3fb39f40b42391af39fcce06edabff5233b3e8064a07c528d1c751a6923d5116026c7786e01b22e2d35277a098cae99" -X POST 'https://indodax.com/tapi' -d 'method=getInfo&timestamp=1578304294000&recvWindow=1578303937000'
+    ```
+
+### ENUM Definitions
+**Parameter method (Method) :**
+* getInfo
+* transHistory
+* trade
+* tradeHistory
+* openOrders
+* orderHistory
+* getOrder
+* getOrderByClientOrderId
+* cancelOrder
+* cancelByClientOrderId
+* withdrawFee
+* withdrawCoin
+* listDownline
+* checkDownline
+* createVoucher (Partner Only)
+
+**Transaction type (type):**
+* buy
+* sell
+
+**Sort by (order):**
+* asc
+* desc
+
+**Pair to get the information from (pair):**
+* btc_idr
+* ltc_btc
+* doge_btc
+
+**Currency to withdraw (currency):**
+* btc
+* eth
+* doge
+* ltc
+
+### Private API Endpoints
+All request sent to this endpoint
+
+    POST https://indodax.com/tapi
+
+All request sent with Request header
+
+| Name | Type | Mandatory | Description |
+|-|-|-|-|
+|`Key`| string | yes | API Key|
+|`Sign`| string | yes | Encrypted with method HMAC-SHA512 using secret key. (Request body (?param=val&param1=val1))|
+
+All request sent with Request body
+
+| Name | Type | Mandatory | Description |
+|-|-|-|-|
+|`method`| string |yes|Specify the method you want to call |
+|`timestamp`| timestamp in milisecond | optional when sending request using `nonce` | The millisecond timestamp of when the request was created and sent. Default value is 5000 (milliseconds).|
+|`recvWindow`| timestamp in milisecond | no | This parameter is optional when you sending request using timestamp. The value should specify the number of millisecond after timestamp where your request is valid. That mean your request still valid if it sent and processed within timestamp and timestamp + recvWindow. Default value is 5000 (milliseconds).|
+|`nonce`|int|optional when sending request using `timestamp`|An increment integer. For example if the last request's nonce is 1000, the next request should be 1001 or a larger number.
+

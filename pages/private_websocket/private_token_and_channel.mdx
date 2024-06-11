@@ -1,0 +1,51 @@
+### Generate Private Token and Private Channel
+Provide private token and private channel to use in WebSocket
+
+#### PATH
+```
+POST {base_url}/api/private_ws/v1/generate_token
+```
+
+#### Request Body
+| **Parameter**  		| **Type** 	| **Mandatory**	| **Description**		| **Default** |
+| ----------------	| --------- | ------------- |------------------ | ----------- |
+| `client` 					| string 		| yes 					| `tapi`						| `tapi`			|
+| `tapi_key` 				| string 		| yes	 					| API Key						| 						|
+
+#### Response Body
+| **Parameter**  		| **Type** 	| **Description**																								|
+| -----------------	| --------- | ------------------------------------------------------------- |
+| success 					| int				| if success=1 and failed=0 																		|
+| return						| object		| 																															|
+| return.connToken 	| string		| Use to established connection and verify user private channel |
+| return.channel		| string		| private channel to subscribe 																	|
+| error							| string		| error message of request 																			|
+| error_code				| string		| type of error  																								|
+
+**Success Response**
+```json
+{
+	"success": 1,
+	"return": {
+		"connToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMTIifQ.D4YxclnNWCRH6w47MNV9XcbpKT4aLrMboLg6DzCwm1M",
+		"channel": "pws:#c12d3ca099785ede15c37c9b7642ab89d19bc96e"
+	}
+}
+```
+
+**Failed Response**
+```json
+{
+    "success": 0,
+    "error": "Invalid TAPI key",
+    "error_code": "invalid_tapi_key"
+}
+```
+
+#### Error Code
+| **error_code**  		| **Error**              										| **Description**									|
+| -----------------		| ------------------------------- 								| --------------- 									|
+| invalid_tapi_key 		| Invalid TAPI key  											| `tapi_key` not properly sent or empty `tapi_key`. |
+| invalid_credentials 	| Invalid credentials. API not found or session has expired.	| Invalid `tapi_key` or doesn't exist. 				|
+| bad_sign			 	| Invalid credentials. Bad sign.								| Invalid `tapi_secret` to Encrypt Sign request 	|
+

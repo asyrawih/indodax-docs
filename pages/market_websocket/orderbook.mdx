@@ -1,0 +1,79 @@
+### Orderbook
+
+Provide real-time buy and sell orders for cryptocurrencies, giving insights into market depth and trading liquidity. Use `market:order-book-(pair)` as channel. Change (pair) to the one that you want to subscribe to.
+
+Send request so it will give the following response.
+
+![orderbook](https://github.com/btcid/indodax-official-api-docs/blob/e4ddf92cc75d0fca3bfe501d17c8d95f09423ffc/assets/orderbooks.png)
+
+Request:
+
+| **FIELD** | **TYPE**         | **DESCRIPTION**                                              | **MANDATORY** | **DEFAULT** |
+| --------- | ---------------- | ------------------------------------------------------------ | ------------- | ----------- |
+| method    | string           | specify the method you want to call                          | yes           |             |
+| params    | application/json | data type of the received response                           | yes           |             |
+| channel   | string           | pair information to be subscribed `market:order-book-(pair)` | yes           | ““          |
+| id        | int              | is a random request ID specified by WebSocket client         | yes           | ““          |
+
+```json
+{
+	"method": 1,
+	"params": {
+		"channel": "market:order-book-btcidr"
+	},
+	"id": 4 // is a random request ID specified by WebSocket client
+}
+```
+
+Response:
+
+| **FIELD**      | **TYPE** | **DESCRIPTION**                   | **MANDATORY** | **DEFAULT** |
+| -------------- | -------- | --------------------------------- | ------------- | ----------- |
+| result         | json     | result subscribe/streaming        | yes           |             |
+| channel        | string   | pair information to be subscribed | yes           |             |
+| data           | json     | response data                     | yes           |             |
+| data.pair      | string   | btc / idr / coin name             | yes           |             |
+| data.ask       | json     | required on limit order           | yes           |             |
+| ask.btc_volume | float    | trading volume                    | yes           |             |
+| ask.idr_volume | float    | trading volume                    | yes           |             |
+| ask.price      | numeric  | order pice                        | yes           |             |
+| bid.btc_volume | float    | trading volume                    | yes           |             |
+| bid.idr_volume | float    | trading volume                    | yes           |             |
+| bid.price      | numeric  | order price                       | yes           |             |
+| offset         | int      | offset of the data                | yes           |             |
+
+```json
+{
+	"result": {
+		"channel": "market:order-book-btcidr",
+		"data": {
+			"data": {
+				"pair": "btcidr",
+				"ask": [{
+						"btc_volume": "0.11035661",
+						"idr_volume": "35251984",
+						"price": "319437000"
+					},
+					{
+						"btc_volume": "0.20000000",
+						"idr_volume": "63950800",
+						"price": "319754000"
+					}
+				],
+				"bid": [{
+						"btc_volume": "0.61427265",
+						"idr_volume": "196220798",
+						"price": "319436000"
+					},
+					{
+						"btc_volume": "0.00697822",
+						"idr_volume": "2228655",
+						"price": "319373000"
+					}
+				]
+			},
+			"offset": 67409
+		}
+	}
+}
+```

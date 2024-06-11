@@ -1,0 +1,6 @@
+{
+  "public_api" : "Public Api",
+  "private_api" : "Private Api",
+  "market_websocket": "Market Websocket",
+  "private_websocket": "Private Websocket"
+}

@@ -1,0 +1,35 @@
+## Depth
+Provide Volume price Buy and Sell on each pair in exchange
+#### Request
+```
+/api/depth/$pair_id
+```
+#### Parameter 
+| Type | Mandatory | Description |
+| ------ | ------ | ------ |
+| String | Optional| Example: `btdidr`, `tenidr`, `ethidr`. For specific pair id please use Response from API [`/api/pairs`](#pairs). Default `$pair_id` is `btcidr`. |
+#### Response
+```json
+{
+    "buy": [
+        [
+            511,
+            "176.61056751"
+        ],
+        [
+            510,
+            "100.00000000"
+        ]
+    ],
+   "sell": [
+        [
+            512,
+            "1591.21213341"
+        ],
+        [
+            513,
+            "0.88109162"
+        ]
+    ]
+}
+```

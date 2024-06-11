@@ -1,0 +1,51 @@
+## Ticker
+Provide Single Ticker Price on each pair in exchange
+#### Request
+```
+/api/ticker/$pair_id
+```
+#### Parameter 
+| Type | Mandatory | Description |
+| ------ | ------ | ------ |
+| String | Optional| Example: `btdidr`, `tenidr`, `ethidr`. For specific pair id please use Response from API [`/api/pairs`](#pairs). Default `$pair_id` is `btcidr`. |
+
+#### Response
+```json
+{
+    "ticker": {
+        "high": "523",
+        "low": "505",
+        "vol_ten": "153588.49847928",
+        "vol_idr": "78884203",
+        "last": "511",
+        "buy": "511",
+        "sell": "512",
+        "server_time": 1571207668
+    }
+}
+```
+
+
+## Ticker All
+Provide All Ticker Prices in exchange
+#### Request
+```
+/api/ticker_all
+```
+#### Response
+```json
+{
+    "tickers": {
+        "btc_idr": {
+            "high": "120009000",
+            "low": "116735000",
+            "vol_btc": "218.13777777",
+            "vol_idr": "25800033297",
+            "last": "117088000",
+            "buy": "117002000",
+            "sell": "117078000",
+            "server_time": 1571207881
+        }  
+    }
+}
+```

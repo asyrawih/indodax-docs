@@ -1,0 +1,52 @@
+### Trade Activity
+
+Provide real-time transactions and trading activity for cryptocurrencies, offering insights into market dynamics and trends. Use `market:trade-activity-pair` as channel. Change `pair` to the one that you want to subscribe to.
+
+Request:
+
+```json
+{
+    "method": 1,
+    "params": {
+        "channel": "market:trade-activity-btcidr"
+    },
+    "id": 2
+}
+```
+
+Response:
+
+```json
+{
+    "id": 2,
+    "result": {
+        "recoverable": true,
+        "epoch": "1633996541",
+        "offset": 243555
+    }
+}
+```
+
+Received Message:
+
+```json
+{
+    "result": {
+        "channel": "market:trade-activity-btcidr",
+        "data": {
+            "data": [
+                [
+                    "btcidr",       // pair
+                    1635274052,     // epoch timestamp in second
+                    21999427,       // sequence number
+                    "buy",          // side (buy/sell)
+                    881991000,      // filled price
+                    "29740",        // IDR volume (BTC/IDR)
+                    "0.00003372"    // BTC volume (BTC/IDR)
+                ]
+            ],
+            "offset": 243556
+        }
+    }
+}
+```

@@ -1,0 +1,290 @@
+#### Open Orders Endpoints
+This method gives the list of current open orders (buy and sell).
+
+Request Body
+
+| Name | Type | Mandatory | Description | Value | default |
+|-|-|-|-|-|-|
+|`method`| string |yes|Specify the method you want to call |openOrders||
+|`pair`|string|no|Pair to get the information from|btc_idr, ltc_btc, doge_btc, etc||
+
+Response `pair btc_idr`
+```json
+{
+    "success": 1,
+    "return": {
+        "orders": [
+                {
+                    "order_id": "172",
+                    "client_order_id": "clientx-sj82ks82j",
+                    "submit_time": "1693226027",
+                    "price": "421004000",
+                    "type": "sell",
+                    "order_type": "limit",
+                    "order_btc": "0.02000000",
+                    "remain_btc": "0.00133450"
+                },
+                {
+                    "order_id": "173",
+                    "client_order_id": "clientx-sj82ks83j",
+                    "submit_time": "1693280465",
+                    "price": "421003000.00000000",
+                    "type": "buy",
+                    "order_type": "stoplimit",
+                    "order_idr": "1266293.00000000",
+                    "remain_idr": "1266293.00000000"
+                }
+            ]
+        }
+    }
+```
+Response `if pair is not set`
+
+```json
+{
+    "success": 1,
+    "return": {
+        "orders": {
+            "btc_idr": [
+                {
+                    "order_id": "172",
+                    "client_order_id": "clientx-sj82ks82j",
+                    "submit_time": "1693226027",
+                    "price": "421004000",
+                    "type": "sell",
+                    "order_type": "limit",
+                    "order_btc": "0.02000000",
+                    "remain_btc": "0.00133450"
+                },
+                {
+                    "order_id": "173",
+                    "client_order_id": "clientx-sj82ks83j",
+                    "submit_time": "1693280465",
+                    "price": "421003000.00000000",
+                    "type": "buy",
+                    "order_type": "stoplimit",
+                    "order_idr": "1266293.00000000",
+                    "remain_idr": "1266293.00000000"
+                }
+            ]
+        }
+    }
+}
+```
+
+#### Order History
+This method gives the list of order history (buy and sell)
+
+Request Body
+
+| Name | Type | Mandatory | Description | Value | default |
+|-|-|-|-|-|-|
+|`method`| string |yes|Specify the method you want to call |orderHistory||
+|`pair`|string|yes|Pair to get the information from|btc_idr, ltc_btc, doge_btc, etc|btc_idr|
+|`count`|int|no|number of transaction which will be displayed||1000|
+|`from`|int|no||||
+
+Response
+```json
+{
+    "success": 1,
+    "return": {
+        "orders": [
+            {
+                "order_id": "59639504",
+                "client_order_id": "clientx-sj82ks82j",
+                "type": "buy",
+                "price": "100207000",
+                "submit_time": "1578648363",
+                "finish_time": "1578649332",
+                "status": "cancelled",
+                "order_idr": "336058",
+                "remain_idr": "336058"
+            },
+            {
+                "order_id": "59636253",
+                "client_order_id": "clientx-sj82ks83j",
+                "type": "sell",
+                "price": "107202000",
+                "submit_time": "1578645288",
+                "finish_time": "1578645297",
+                "status": "filled",
+                "order_btc": "0.00313482",
+                "remain_btc": "0.00000000"
+            }...
+        ]
+    }
+}
+```
+
+#### Get Order Endpoints
+Use getOrder to get specific order details.
+
+Request Body
+
+| Name | Type | Mandatory | Description | Value | default |
+|-|-|-|-|-|-|
+|`method`| string |yes|Specify the method you want to call |getOrder||
+|`pair`|string|yes|Pair to get the information from|btc_idr, ltc_btc, doge_btc, etc|btc_idr|
+|`order_id`|int|yes|Order ID|59639504||
+
+Response
+```json
+{
+    "success": 1,
+    "return": {
+        "order": {
+            "order_id": "59639504",
+            "price": "100207000",
+            "type": "buy",
+            "order_rp": "336058",
+            "remain_rp": "336058",
+            "submit_time": "1578648363",
+            "finish_time": "1578649332",
+            "status": "cancelled",
+            "receive_idr": "336058",
+            "client_order_id": "clientx-sj82ks82j"
+        }
+    }
+}
+```
+Response for `refund order done`
+```json
+{
+    "success": 1,
+    "return": {
+        "order": {
+            "order_id": "59639504",
+            "price": "100207000",
+            "type": "buy",
+            "order_rp": "336058",
+            "remain_rp": "336058",
+            "submit_time": "1578648363",
+            "finish_time": "1578649332",
+            "status": "cancelled",
+            "receive_idr": "336058",
+	        "refund_idr": "3866",
+            "client_order_id": "clientx-sj82ks82j"
+        }
+    }
+}
+```
+
+#### Get Order By Client Order ID Endpoints
+Use getOrderByClientOrderId to get specific order details by Client Order ID.
+
+Request Body
+
+| Name | Type | Mandatory | Description | Value | default |
+|-|-|-|-|-|-|
+|`method`| string |yes|Specify the method you want to call |getOrderByClientOrderId||
+|`client_order_id`|string|yes|Client Order ID|clientx-sj82ks82j||
+
+Response
+```json
+{
+    "success": 1,
+    "return": {
+        "order": {
+            "order_id": "59639504",
+            "client_order_id": "clientx-sj82ks82j",
+            "price": "100207000",
+            "type": "buy",
+            "order_rp": "336058",
+            "remain_rp": "336058",
+            "submit_time": "1578648363",
+            "finish_time": "1578649332",
+            "status": "cancelled",
+            "receive_idr": "336058",
+        }
+    }
+}
+```
+Response for `refund order done`
+```json
+{
+    "success": 1,
+    "return": {
+        "order": {
+            "order_id": "59639504",
+            "client_order_id": "clientx-sj82ks82j",
+            "price": "100207000",
+            "type": "buy",
+            "order_rp": "336058",
+            "remain_rp": "336058",
+            "submit_time": "1578648363",
+            "finish_time": "1578649332",
+            "status": "cancelled",
+            "receive_idr": "336058",
+	        "refund_idr": "3866"
+        }
+    }
+}
+```
+
+#### Cancel Order Endpoints
+This method is for canceling an existing open order.
+
+Request Body
+
+| Name | Type | Mandatory | Description | Value | default |
+|-|-|-|-|-|-|
+|`method`| string |yes|Specify the method you want to call |cancelOrder||
+|`pair`|string|yes|Pair to get the information from|btc_idr, ltc_btc, doge_btc, etc|btc_idr|
+|`order_id`|int|yes|Order ID|10.00000000||
+|`type`|int|yes|Transaction type|buy / sell||
+|`order_type`|string|optional|type of order|limit, stoplimit|limit|
+
+Response
+```json
+{
+    "success": 1,
+    "return": {
+        "order_id": 666883,
+        "client_order_id": "clientx-sj82ks82j",
+        "type": "sell",
+        "pair": "btc_idr",
+        "balance": {
+            "idr": "33605800",
+            "btc": "0.00000000",
+            ...
+            "frozen_idr": "0",
+            "frozen_btc": "0.00000000",
+            ...
+        }
+    }
+}
+```
+
+#### Cancel Order By Client Order ID Endpoints
+This method is for canceling an existing open order by client_order_id.
+
+Request Body
+
+| Name | Type | Mandatory | Description | Value | default |
+|-|-|-|-|-|-|
+|`method`| string |yes|Specify the method you want to call |cancelByClientOrderId||
+|`client_order_id`|string|yes|Client Order ID|clientx-sj82ks82j||
+
+Response
+```json
+{
+    "success": 1,
+    "return": {
+        "order_id": 666883,
+        "client_order_id": "clientx-sj82ks82j",
+        "type": "sell",
+        "pair": "btc_idr",
+        "balance": {
+            "idr": "33605800",
+            "btc": "0.00000000",
+            ...
+            "frozen_idr": "0",
+            "frozen_btc": "0.00000000",
+            ...
+        }
+    }
+}
+```
+
+

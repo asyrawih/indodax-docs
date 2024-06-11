@@ -1,0 +1,69 @@
+#### Transaction History Endpoints
+This method gives list of deposits and withdrawals of all currencies.
+
+Request Body
+
+| Name | Type | Mandatory | Description | Value | default |
+|-|-|-|-|-|-|
+|`method`| string |yes|Specify the method you want to call |transHistory||
+|`start`| date |optional|Specify the start date of transaction history you want to search |Y-m-d (eg: 2021-07-17)||
+|`end`| date |required if start date is set|Specify the end date of transaction history you want to search |Y-m-d (eg: 2021-07-17)||
+
+Response
+```json
+{
+    "success": 1,
+    "return": {
+        "withdraw": {
+            "idr": [
+                {
+                    "status": "success",
+                    "type": "coupon",
+                    "rp": "115205",
+                    "fee": "500",
+                    "amount": "114705",
+                    "submit_time": "1539844166",
+                    "success_time": "1539844189",
+                    "withdraw_id": "1783717",
+                    "tx": "BTC-IDR-RDTVVO2P-ETD0EVAW-VTNZGMIR-HTNTUAPI-84ULM9OI",
+                    "sender": "boris",
+                    "used_by": "viginia88"
+                },
+                ...
+            ],
+            "btc": [],
+            "abyss": [],
+            ...
+        },
+        "deposit": {
+            "idr": [
+                {
+                    "status": "success",
+                    "type": "duitku",
+                    "rp": "393000",
+                    "fee": "5895",
+                    "amount": "387105",
+                    "submit_time": "1576555012",
+                    "success_time": "1576555012",
+                    "deposit_id": "3395438",
+                    "tx": "Duitku OVO Settlement"
+                },
+                ...
+            ],
+            "btc": [
+                {
+                    "status": "success",
+                    "btc": "0.00118769",
+                    "amount": "0.00118769",
+                    "success_time": "1539529208",
+                    "deposit_id": "3602369",
+                    "tx": "c816aeb35a5b42f389970325a32aff69bb6b2126784dcda8f23b9dd9570d6573"
+                },
+                ...
+            ],
+            "abyss": [],
+            ...
+        }
+    }
+}
+```

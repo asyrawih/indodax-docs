@@ -1,0 +1,32 @@
+## Authentication
+
+Connect to Postman using Market Data Base URL by clicking connect, until the connect button changes to disconnect.  
+
+Send request after insert message field with `id` and `static token` as shown below
+
+![auth and connect](https://github.com/btcid/indodax-official-api-docs/blob/b5c1f8f5fcc79469d3f790e417b9988ac7bd26bb/assets/auth.jpg)
+
+Request:
+
+```json
+{
+    "params": {
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE5NDY2MTg0MTV9.UR1lBM6Eqh0yWz-PVirw1uPCxe60FdchR8eNVdsskeo"
+    },
+    "id": 1
+}
+```
+
+Response:
+
+```json
+{
+    "id": 1,
+    "result": {
+        "client": "9690f773-a529-4277-9b09-57fa3ddea251",
+        "version": "2.8.6",
+        "expires": true,
+        "ttl": 311392452
+    }
+}
+```

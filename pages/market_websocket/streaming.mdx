@@ -1,0 +1,109 @@
+#### Streaming Result
+
+By following the steps starting from connecting to Market Data & authenticate using [Authentication](#authentication) section, then following the streaming steps 
+
+in the [Orderbook](#orderbook) section so you can get Market Data WebSocket as long as they are connected to the WS3. 
+
+![result](https://github.com/btcid/indodax-official-api-docs/blob/e4ddf92cc75d0fca3bfe501d17c8d95f09423ffc/assets/results.png)
+
+## Unsubscribing from Channel
+
+To **unsubscribe** from a **channel**, use `2` as `method` in the request body.
+
+Request:
+
+```json
+{
+    "method": 2,
+    "params": {
+        "channel": "chart:tick-usdtidr"
+    },
+    "id": 3
+}
+```
+
+Response:
+
+```json
+{
+    "id":  3,
+    "result": {}
+}
+```
+
+## Get Data from Specific Offset and Subscribe
+
+In case of connection problem, you can get data from specific **offset** and subscribe again. Use `true` as `recover` and specify the last `offset` that you already have. The **response** will contain data from the **next** offset and you will be subscribed again and receive messages.
+
+Request:
+
+```json
+{
+    "method": 1,
+    "params": {
+        "channel": "chart:tick-usdtidr",
+        "recover": true,
+        "offset": 820574
+    },
+    "id": 2
+}
+```
+
+Response:
+
+```json
+{
+    "id": 2,
+    "result": {
+        "recoverable": true,
+        "epoch": "1630401092",
+        "publications": [
+            {
+                "data": [
+                    [
+                        1635245109,
+                        4673347,
+                        14130,
+                        "17.75166439"
+                    ]
+                ],
+                "offset": 820574
+            },
+            {
+                "data": [
+                    [
+                        1635245114,
+                        4673348,
+                        14130,
+                        "10.00000000"
+                    ]
+                ],
+                "offset": 820575
+            },
+            {
+                "data": [
+                    [
+                        1635245117,
+                        4673349,
+                        14131,
+                        "221.07734767"
+                    ]
+                ],
+                "offset": 820576
+            },
+            {
+                "data": [
+                    [
+                        1635245127,
+                        4673350,
+                        14131,
+                        "3.24202108"
+                    ]
+                ],
+                "offset": 820577
+            }
+        ],
+        "offset": 820577
+    }
+}
+```

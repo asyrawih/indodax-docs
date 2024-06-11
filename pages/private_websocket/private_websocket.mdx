@@ -1,0 +1,45 @@
+## Private WebSocket
+
+| **Environment**  	| **Base URL**              			| **Description**	|
+| -----------------	| ------------------------------- | --------------- |
+| Production       	| wss://pws.indodax.com/ws/?cf_ws_frame_ping_pong=true   		| Access for production							|
+| Demo             	| wss://pws.demo-indodax.com/ws/?cf_ws_frame_ping_pong=true  	| Access for staging									|
+
+Connect using Environment Base URL.
+
+### Authentication
+Send request message with field `id` and `token` you get from [Generate Private Token and Private Channel](#generate-private-token-and-private-channel).
+
+Request Message:
+
+```json
+{"connect":{"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzMWFlMGUzYjU1NzNlMzI1YTU1MGM1ZDg2MGM1YjQ3ZDQyYjdkZjMxIiwiZXhwIjoxNzA1NzE4NjEyfQ.T1dymQ7dGS4sASLlZC3VE4JTjdvdsasJSsadaK"},"id": 1}
+```
+
+#### Success Response
+
+```json
+{
+    "id": 1,
+    "connect": {
+        "client": "0f812879-fc64-482f-a220-eb1860c71189",
+        "version": "5.2.0",
+        "expires": true,
+        "ttl": 86133
+    }
+}
+```
+
+#### Expired Token Response
+
+```json
+{
+    "id": 1,
+    "error": {
+        "code": 109,
+        "message": "token expired"
+    }
+}
+```
+
+When your token has expired, you will need to generate a new token. 

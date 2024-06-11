@@ -1,0 +1,174 @@
+#### Trade Endpoints
+Provides access to essential trading functionalities and data for seamless integration with trading platforms.
+
+> ℹ️ **Important Updates**
+> 
+> As per 10 September 2022,
+> - You may experience under filled order if using `idr` parameter when create buy order. To solve this issue, simply send `btc` instead `idr` and use `order_type : "limit"`.
+> - You can create buy limit order using coin (eg: `btc`) as amount.
+> - You can use `order_type : "market"` to create market order.
+> - You can try the new API version by creating account in https://demo-indodax.com. You will receive balance for some coins, approximately 1 minute after successfully sign-up.
+> - These coins can be used for trade testing, but can't be withdrawn. You also can't deposit any coin to demo-indodax.com.
+>
+> As per January 2024,
+> - You can create order by adding infomartional `client_order_id` (eg: `client_order_id : "clientx-sj82ks82j"`)
+>
+> ℹ️ **Information**
+> 
+> The trade API implements a `rate limit of 20 requests per second` per `account` and `pair`. Exceeding this triggers a `5-second trading block` for the affected account and pair.
+> ```json
+> status code: 429
+> content type: application/json
+> body: { "message": "Your User ID sent too many trade request for pair BTCIDR, please try again in 5 seconds" }
+> ```
+
+\
+Request Body
+
+| Name | Type | Mandatory | Description | Value | default |
+|-|-|-|-|-|-|
+|`method`| string |yes|Specify the method you want to call |trade| |
+|`pair`|string|yes|Pair to get the information from| btc_idr, ltc_btc, doge_btc, etc| |
+|`type`|string|yes|transaction type (buy or sell)|buy/sell||
+|`price`|numeric|required on limit order|order price|5000000||
+|`idr`|numeric|required for (limit/market) buy order with amount in IDR|amount of rupiah to buy coin|1000000||
+|`btc`|numeric|required for limit buy order with amount in coin or sell order|amount of coin to buy/sell|0.001||
+|`order_type`|string|optional|type of order|limit/market|limit|
+|`client_order_id`|string|optional, max 36 character, allowed = alphanumeric _-|set your client order id|eg: clientx-sj82ks82j||
+|`time_in_force`|string|optional|currently only valid for "limit" order type, defines how long an order remains working till it is expired by the system|GTC,MOC|GTC|
+
+**Notes**
+- Request will be rejected if you send BUY order request with both `idr` set & `order_type` set to LIMIT.
+- Currently MARKET BUY order only support amount in `idr`.
+- Trade Request from Trade API with `order_type = limit` and `time_in_force = MOC` specified will be rejected if price is better than top of book price.
+
+Sample Payload for limit order using idr amount:
+```javascript
+{
+	"method": "trade"
+	"nonce": 4531235
+    "idr": 100000,
+	"price": 500000,
+	"type": "buy",
+    "client_order_id": "clientx-sj82ks82j", // New field (optional)
+ 	"time_in_force": "MOC" // New field (GTC, MOC)
+}
+```
+
+*Sample Payload for limit order using coin amount:
+```javascript
+{
+	"method": "trade",
+	"nonce": 4531235,
+    "btc": 0.001,
+	"order_type": "limit",
+	"price": 500000,
+	"type": "buy",
+    "client_order_id": "clientx-sj82ks82j", // New field (optional)
+	"time_in_force": "MOC" // New field (GTC, MOC)
+}
+```
+
+*Sample Payload for market order:
+```javascript
+{
+	"method": "trade",
+	"nonce": 4531235,
+    "idr": 200000,
+    "order_type": "market",
+    "type": "buy",
+    "client_order_id": "clientx-sj82ks82j" // New field (optional)
+}
+```
+
+Positive case
+
+Response
+```json
+{
+    "success": 1,
+    "return": {
+        "receive_btc": "0.00000000",
+        "spend_rp": 0,
+        "fee": 0,
+        "remain_rp": 5000000,
+        "order_id": 59632813,
+        "client_order_id": "clientx-sj82ks82j"
+    }
+}
+```
+
+Negative case  
+
+Response `order_type = limit`
+```json
+{
+    "success": 0,
+    "error": "Order cancelled because it’s not maker."
+} 
+```
+
+Response `time_in_force = MOC`
+```json
+{
+    "success": 0,
+    "error": "Order cancelled because it’s not maker."
+} 
+```
+
+Response `limit in the money`
+```json
+{
+    "success": 0,
+    "error": "Order cancelled because it’s not maker."
+} 
+```
+
+Response `client_order_id`
+```json
+{
+    "success": 0,
+    "error": "client order id clientx-sj82ks82j already exists"
+}
+```
+
+
+#### Trade History Endpoints
+This method gives information about transaction in buying and selling history.
+
+Request Body
+
+| Name | Type | Mandatory | Description | Value | default |
+|-|-|-|-|-|-|
+|`method`| string |yes|Specify the method you want to call |tradeHistory||
+|`count`|numeric|no|number of transaction which will be displayed||1000|
+|`from_id`|numeric|no|first trade ID|||
+|`end_id`|numeric|no|end trade ID|||
+|`order`|string|no|sort by|asc / desc|desc|
+|`since`|timestamp|no|start time||unix time|
+|`end`|timestamp|no|end time||unix time|
+|`pair`|string|yes|Pair to get the information from|btc_idr, ltc_btc, doge_btc, etc|btc_idr|
+|`order_id`|numeric|no|order id|59636253||
+
+Response
+```json
+{
+    "success": 1,
+    "return": {
+        "trades": [
+            {
+                "trade_id": "17393994",
+                "order_id": "59636253",
+                "type": "sell",
+                "btc": "0.00313482",
+                "price": "107202000",
+                "fee": "0",
+                "trade_time": "1578645297",
+                "client_order_id": "clientx-sj82ks82j"
+            },
+            ...
+        ]
+    }
+}
+```
+

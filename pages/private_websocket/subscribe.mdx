@@ -1,0 +1,181 @@
+### Subscribing to Private Channel
+
+You can **subscribe** to **private channel** using `channel` you get from [Generate Private Token and Private Channel](#generate-private-token-and-private-channel).
+
+### Order Update Event
+
+Request Message:
+
+```json
+{"subscribe":{"channel":"pws:#c12d3ca099785ede15c37c9b7642ab89d19bc96e"},"id":2}
+```
+
+#### Success Response
+Response New Order:
+```json
+{
+  "push": {
+    "channel": "pws:#c12d3ca099785ede15c37c9b7642ab89d19bc96e",
+    "pub": {
+      "data": [
+        {
+          "eventType": "order_update",
+          "order": {
+            "orderId": "aaveidr-limit-3397",
+            "symbol": "aaveidr",
+            "side": "BUY",
+            "origQty": "0.00996909",
+            "unfilledQty": "0.00996909",
+            "executedQty": "0",
+            "price": "2000000",
+            "description": "AAVE/IDR",
+            "status": "NEW",
+            "transactionTime": 1705635775203,
+            "clientOrderId": "lendidr-limit-3397"
+          }
+        }
+      ]
+    }
+  }
+}
+```
+
+Response Fills Order:
+```json
+{
+  "push": {
+    "channel": "pws:#c12d3ca099785ede15c37c9b7642ab89d19bc96e",
+    "pub": {
+      "data": [
+        {
+          "eventType": "order_update",
+          "order": {
+            "orderId": "aaveidr-limit-3397",
+            "tradeId": "144332127176055681",
+            "symbol": "aaveidr",
+            "side": "BUY",
+            "origQty": "0.00996909",
+            "unfilledQty": "0",
+            "executedQty": "0.00996909",
+            "price": "2000000",
+            "description": "AAVE/IDR",
+            "status": "FILL",
+            "transactionTime": 1705635775203,
+            "fillInformation": {
+              "participant": "TAKER",
+              "fillQty": "0.00996909",
+              "feeAsset": "idr",
+              "feeRate": 0.002,
+              "fee": "39",
+              "taxAsset": "idr",
+              "taxRate": 0.0011,
+              "tax": "21"
+            },
+            "clientOrderId": "lendidr-limit-3397"
+          }
+        }
+      ]
+    }
+  }
+}
+```
+
+Response Cancel Order:
+```json
+{
+  "push": {
+    "channel": "pws:#c12d3ca099785ede15c37c9b7642ab89d19bc96e",
+    "pub": {
+      "data": [
+        {
+          "eventType": "order_update",
+          "order": {
+            "orderId": "aaveidr-limit-3399",
+            "symbol": "aaveidr",
+            "side": "SELL",
+            "origQty": "0.05015045",
+            "unfilledQty": "0.05015045",
+            "executedQty": "0",
+            "price": "2000000",
+            "description": "AAVE/IDR",
+            "status": "CANCELLED",
+            "transactionTime": 1705636274643,
+            "clientOrderId": "lendidr-limit-3399"
+          }
+        }
+      ]
+    }
+  }
+}
+```
+
+Response Done Order:
+```json
+{
+  "push": {
+    "channel": "pws:#c12d3ca099785ede15c37c9b7642ab89d19bc96e",
+    "pub": {
+      "data": [
+        {
+          "eventType": "order_update",
+          "order": {
+            "orderId": "aaveidr-limit-3397",
+            "symbol": "aaveidr",
+            "side": "BUY",
+            "origQty": "0.00996909",
+            "unfilledQty": "0",
+            "executedQty": "0.00996909",
+            "price": "2000000",
+            "description": "AAVE/IDR",
+            "status": "DONE",
+            "transactionTime": 1705635775203,
+            "clientOrderId": "lendidr-limit-3397"
+          }
+        }
+      ]
+    }
+  }
+}
+```
+
+Response Rejected (FOK) Order:
+```json
+{
+  "push": {
+    "channel": "pws:#c12d3ca099785ede15c37c9b7642ab89d19bc96e",
+    "pub": {
+      "data": [
+        {
+          "eventType": "order_update",
+          "order": {
+            "orderId": "aaveidr-limit-3397",
+            "symbol": "aaveidr",
+            "side": "BUY",
+            "origQty": "0.00996909",
+            "unfilledQty": "0",
+            "executedQty": "0.00996909",
+            "price": "2000000",
+            "description": "AAVE/IDR",
+            "status": "REJECTED",
+            "transactionTime": 1705635775203,
+            "clientOrderId": "lendidr-limit-3397"
+          }
+        }
+      ]
+    }
+  }
+}
+```
+
+#### Failed Response
+When you subscribe to wrong `channel`, the response will failed as below.
+
+```json
+{
+    "id": 2,
+    "error": {
+        "code": 103,
+        "message": "permission denied"
+    }
+}
+```

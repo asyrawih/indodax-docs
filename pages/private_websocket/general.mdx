@@ -1,0 +1,17 @@
+# Private WebSocket Documentation
+
+## Request Private Token and Private Channel
+
+### General Information
+
+#### Base URL
+| **Environment**  	| **Base URL**              									| **Description**																											|
+| -----------------	| ------------------------------------------- | ------------------------------------------------------------------- |
+| Production       	| https://indodax.com/ , https://btcapi.net   | Access for production. For https://btcapi.net need to be whitelist	|
+| Demo             	| https://demo-indodax.com/  	 								|	Access for demo.																										|
+
+#### Request Header
+| **Parameter**  	| **Type** 	| **Mandatory**	| **Description**			|
+| --------------	| --------- | ------------- |-------------------- |
+| `Sign`      		| string 		| yes 					| `Sign` Encrypted with method `HMAC-SHA512` using `tapi secret key`. (Request body (?param=val&param1=val1))   |
+
