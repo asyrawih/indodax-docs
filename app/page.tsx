@@ -1,6 +1,11 @@
 
 export default function Home() {
   return (
-    <div className="bg-gray-400">test</div>
+    <>
+      <h1>Indodax Docs</h1>
+      <div className="bg-gray-400">
+        <a href="/public_api/general">Docs</a>
+      </div>
+    </>
   );
 }
